@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Book of Love</title>
+  <style>
+    :root {
+      --bg: #1e1915;
+      --paper: #fffcf7;
+      --text: #2c221e;
+      --accent: #8b3a3a;
+      --gold: #d4af37;
+      --border: #e6dac8;
+      --leather: #802329;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Georgia', serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .book-container {
+      width: 90%;
+      max-width: 420px;
+      height: 85vh;
+      max-height: 680px;
+      position: relative;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* Common Page Layout */
+    .page {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease-in-out;
+      box-sizing: border-box;
+    }
+
+    .page.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* PAGE 0: VINTAGE BOOK COVER */
+    #page-0 {
+      background: #f4ead5;
+      border: 16px solid var(--leather);
+      outline: 2px solid var(--gold);
+      outline-offset: -10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 40px 20px;
+      text-align: center;
+      box-shadow: inset 12px 0 15px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    .cover-corner-tl, .cover-corner-tr, .cover-corner-bl, .cover-corner-br {
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      border: 2px solid var(--gold);
+    }
+    .cover-corner-tl { top: 15px; left: 15px; border-right: none; border-bottom: none; }
+    .cover-corner-tr { top: 15px; right: 15px; border-left: none; border-bottom: none; }
+    .cover-corner-bl { bottom: 15px; left: 15px; border-right: none; border-top: none; }
+    .cover-corner-br { bottom: 15px; right: 15px; border-left: none; border-top: none; }
+
+    .cover-title {
+      font-size: 2.2rem;
+      color: #3b2314;
+      font-style: italic;
+      margin-top: 20px;
+      text-shadow: 1px 1px 0px rgba(212, 175, 55, 0.5);
+    }
+
+    .cover-subtitle {
+      font-size: 1.05rem;
+      color: #6e4e37;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    .cover-emblem {
+      font-size: 2.5rem;
+      color: var(--gold);
+      margin: 15px 0;
+    }
+
+    .cover-footer {
+      font-size: 0.9rem;
+      color: #555;
+      letter-spacing: 1px;
+    }
+
+    .btn-open {
+      background: var(--leather);
+      color: #fff;
+      border: 1px solid var(--gold);
+      padding: 10px 24px;
+      font-size: 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      margin-top: 15px;
+    }
+
+    /* INSIDE PAGES (1 & 2) */
+    .inside-page {
+      background: var(--paper);
+      padding: 25px 20px 60px 20px;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    .title {
+      font-size: 1.3rem;
+      text-align: center;
+      color: var(--accent);
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      flex-shrink: 0;
+    }
+
+    .content-area {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-right: 5px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      text-align: center;
+      margin: auto 0;
+    }
+
+    .author {
+      margin-top: 12px;
+      font-style: italic;
+      text-align: right;
+      color: var(--accent);
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 50px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      background: var(--paper);
+    }
+
+    button.nav-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 0.95rem;
+      font-family: inherit;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="book-container">
+  
+  <div class="page active" id="page-0">
+    <div class="cover-corner-tl"></div>
+    <div class="cover-corner-tr"></div>
+    <div class="cover-corner-bl"></div>
+    <div class="cover-corner-br"></div>
+
+    <div>
+      <div class="cover-title">Our Book of Love</div>
+      <div class="cover-subtitle">Daily Reminders For My Beloved</div>
+    </div>
+
+    <div class="cover-emblem">❦</div>
+
+    <div>
+      <div class="cover-footer">By Your Husband</div>
+      <button class="btn-open" onclick="switchPage(1)">Open Book &rarr;</button>
+    </div>
+  </div>
+
+  <div class="page inside-page" id="page-1">
+    <div class="title">My Dearest Layla</div>
+    <div class="content-area">
+      <div class="content">I wish I was talented in a way that I could express how much I love you. I can't paint, sing, dance or write. You settled for this nerd so this is all I have to offer with my limited skill set. I was afraid that I had lost the ability to surprise you. I truly love the privilege of being the one who gets to make you happy. There is nothing more beautiful in this world than your smile. No sound sweeter than your laugh. No touch better than your kiss.
+
+This book is my eternal love letter to you. I hope that every day you find yourself closer to seeing yourself the way I see you.</div>
+    </div>
+    
+    <div class="controls">
+      <button class="nav-btn" onclick="switchPage(0)">&larr; Cover</button>
+      <span style="font-size: 0.8rem; color: #aaa;">Page 1</span>
+      <button class="nav-btn" onclick="switchPage(2)">Page 2 &rarr;</button>
+    </div>
+  </div>
+
+  <div class="page inside-page" id="page-2">
+    <div class="title" id="poem-title">Poem of the Day</div>
+    <div class="content-area">
+      <div class="content" id="poem-text">Loading today's poem...</div>
+      <div class="author" id="poem-author"></div>
+    </div>
+
+    <div class="controls">
+      <button class="nav-btn" onclick="switchPage(1)">&larr; Page 1</button>
+      <span style="font-size: 0.8rem; color: #aaa;">Page 2</span>
+      <button class="nav-btn" onclick="switchPage(0)">Cover ↺</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function switchPage(pageNum) {
+    document.getElementById('page-0').classList.toggle('active', pageNum === 0);
+    document.getElementById('page-1').classList.toggle('active', pageNum === 1);
+    document.getElementById('page-2').classList.toggle('active', pageNum === 2);
+  }
+
+  // Rumi-Prioritized Local Library
+  const rumiPoems = [
+    {
+      title: "In Your Light",
+      text: "In your light, I learn how to love.\nIn your beauty, how to make poems.\nYou dance inside my chest, where no one sees you,\nbut sometimes I do, and that light becomes this art.",
+      author: "— Rumi"
+    },
+    {
+      title: "Lovers Don't Finally Meet",
+      text: "Lover's don't finally meet somewhere.\nThey're in each other all along.\n\nWhat you seek is seeking you.\n\nOnly from the heart can you touch the sky.",
+      author: "— Rumi"
+    },
+    {
+      title: "The Minute I Heard My First Love Story",
+      text: "The minute I heard my first love story\nI started looking for you, not knowing\nhow blind that was.\nLovers don't finally meet somewhere.\nThey're in each other all along.",
+      author: "— Rumi"
+    },
+    {
+      title: "A Thousand Half-Loves",
+      text: "Die in this love. Die in this love.\nIf you die in this love, your soul will be renewed.\n\nForget safety. Live where you fear to live.\nDestroy your reputation. Be notorious.\n\nI want to see you. Know your voice. Recognize your face.",
+      author: "— Rumi"
+    }
+  ];
+
+  const secondaryFallbackPoems = [
+    {
+      title: "Sonnet 116",
+      text: "Let me not to the marriage of true minds\nAdmit impediments. Love is not love\nWhich alters when it alteration finds,\nOr bends with the remover to remove.\nO no! it is an ever-fixed mark\nThat looks on tempests and is never shaken.",
+      author: "— William Shakespeare"
+    },
+    {
+      title: "Sonnet 43",
+      text: "How do I love thee? Let me count the ways.\nI love thee to the depth and breadth and height\nMy soul can reach, when feeling out of sight\nFor the ends of being and ideal grace.",
+      author: "— Elizabeth Barrett Browning"
+    },
+    {
+      title: "She Walks in Beauty",
+      text: "She walks in beauty, like the night\nOf cloudless climes and starry skies;\nAnd all that's best of dark and bright\nMeet in her aspect and her eyes.",
+      author: "— Lord Byron"
+    }
+  ];
+
+  async function loadDailyPoem() {
+    const textEl = document.getElementById('poem-text');
+    const authorEl = document.getElementById('poem-author');
+    const titleEl = document.getElementById('poem-title');
+
+    const today = new Date();
+    const dayIndex = Math.floor(today.getTime() / (1000 * 60 * 60 * 24));
+
+    // Priority 1: Cycle through Rumi's poems (75% of days)
+    if (dayIndex % 4 !== 3) {
+      const selectedRumi = rumiPoems[dayIndex % rumiPoems.length];
+      titleEl.innerText = selectedRumi.title;
+      textEl.innerText = selectedRumi.text;
+      authorEl.innerText = selectedRumi.author;
+      return;
+    }
+
+    // Priority 2: Fetch live love poem from PoetryDB or fallback to classic masters
+    try {
+      const response = await fetch('https://poetrydb.org/lines/love');
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        const selectedPoem = data[dayIndex % data.length];
+        const lines = selectedPoem.lines.slice(0, 16).join('\n');
+        titleEl.innerText = selectedPoem.title;
+        textEl.innerText = lines;
+        authorEl.innerText = "— " + selectedPoem.author;
+        return;
+      }
+    } catch (e) {
+      console.log('Online fetch failed, switching to secondary local collection.');
+    }
+
+    const fallback = secondaryFallbackPoems[dayIndex % secondaryFallbackPoems.length];
+    titleEl.innerText = fallback.title;
+    textEl.innerText = fallback.text;
+    authorEl.innerText = fallback.author;
+  }
+
+  loadDailyPoem();
+</script>
+
+</body>
+</html>
